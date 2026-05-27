@@ -3,7 +3,7 @@
     "cta": "Contact us"
   },
   "hero": {
-    "eyebrow": "Creative Studio — London",
+    "eyebrow": "Creative Studio",
     "tagline": "Possibility, with wings.",
     "scrollLabel": "Scroll",
     "bottomLeft": "From surface to air.\nIt all starts with an action.",
@@ -18,10 +18,10 @@
       "Art Direction",
       "Talks & Workshops",
       "Identity Systems",
-      "Digital Experiences"
-      "Creative Direction"
-      "Design"
-      "Social Media"
+      "Digital Experiences",
+      "Creative Direction",
+      "Design",
+      "Social Media",
     ]
   },
   "contact": {
