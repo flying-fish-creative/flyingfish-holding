@@ -191,6 +191,16 @@
             pointer-events: none;
         }
 
+        .hero__eyebrow {
+            font-family: var(--font-u);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 1.5rem;
+        }
+
         .hero__logo-img {
             display: block;
             max-width: min(900px, 80vw);
@@ -509,6 +519,15 @@
 
         .footer__links a:hover { color: var(--lime); }
 
+        .footer__col-a {
+            font-family: var(--font-b);
+            font-size: 14px;
+            color: #888;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer__col-a:hover { color: var(--lime); }
+
         .footer__bottom {
             max-width: 1400px;
             margin: 0 auto;
@@ -582,7 +601,7 @@
         <a href="#" aria-label="Flying Fish home">
             <img src="images/Wordmark.svg" alt="Flying Fish" class="nav__logo" id="navLogo">
         </a>
-        <a href="#contact" class="nav__cta">Contact Us</a>
+        <a href="#contact" class="nav__cta" data-content="nav.cta">Contact Us</a>
         <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
             <span></span>
             <span></span>
@@ -600,23 +619,24 @@
         <div class="hero__overlay"></div>
 
         <div class="hero__content">
+            <p class="hero__eyebrow" data-content="hero.eyebrow">Creative Studio — London</p>
             <img src="images/Logo lockup nobackground.svg" alt="Flying Fish" class="hero__logo-img">
-            <span class="hero__tagline">Possibility, with wings.</span>
+            <span class="hero__tagline" data-content="hero.tagline">Possibility, with wings.</span>
         </div>
 
         <div class="hero__bottom">
-            <p class="hero__desc">Bold ideas. Precise craft.<br>London-based design studio.</p>
+            <p class="hero__desc" data-content="hero.bottomLeft">Bold ideas. Precise craft.<br>London-based design studio.</p>
             <div class="hero__scroll">
-                <span class="hero__scroll-label">Scroll</span>
+                <span class="hero__scroll-label" data-content="hero.scrollLabel">Scroll</span>
                 <div class="hero__scroll-line"></div>
             </div>
-            <p class="hero__location">London, UK / Est.&nbsp;2026</p>
+            <p class="hero__location" data-content="hero.bottomRight">London, UK / Est.&nbsp;2026</p>
         </div>
     </section>
 
     <!-- SERVICES TICKER -->
     <div class="ticker" aria-hidden="true">
-        <div class="ticker__track">
+        <div class="ticker__track" id="ticker-track">
             <span class="ticker__item">Product Design <span class="ticker__sep">✦</span></span>
             <span class="ticker__item">Brand Direction <span class="ticker__sep">✦</span></span>
             <span class="ticker__item">Web Design <span class="ticker__sep">✦</span></span>
@@ -641,9 +661,9 @@
     <section class="contact" id="contact">
         <div class="contact__grid">
             <div>
-                <p class="contact__eyebrow fade-in">Let's make something great</p>
-                <h2 class="contact__headline fade-in">Let's make something impossible.</h2>
-                <p class="contact__blurb fade-in">Oat flat whites and Pains Au Chocolat on us. Drop us a line and let's start a conversation.</p>
+                <p class="contact__eyebrow fade-in" data-content="contact.eyebrow">Let's make something great</p>
+                <h2 class="contact__headline fade-in" data-content="contact.headline">Let's make something impossible.</h2>
+                <p class="contact__blurb fade-in" data-content="contact.subline">Oat flat whites and Pains Au Chocolat on us. Drop us a line and let's start a conversation.</p>
             </div>
             <div>
                 <form
@@ -659,18 +679,18 @@
                         <label>Don't fill this out: <input name="bot-field"></label>
                     </p>
                     <div class="form__field">
-                        <label class="form__label" for="fieldName">Name</label>
+                        <label class="form__label form-label-name" for="fieldName">Name</label>
                         <input class="form__input" type="text" id="fieldName" name="name" placeholder="Your name" required>
                     </div>
                     <div class="form__field">
-                        <label class="form__label" for="fieldEmail">Email</label>
+                        <label class="form__label form-label-email" for="fieldEmail">Email</label>
                         <input class="form__input" type="email" id="fieldEmail" name="email" placeholder="your@email.com" required>
                     </div>
                     <div class="form__field">
-                        <label class="form__label" for="fieldMessage">Message</label>
+                        <label class="form__label form-label-message" for="fieldMessage">Message</label>
                         <textarea class="form__textarea" id="fieldMessage" name="message" rows="5" placeholder="Tell us about your project…" required></textarea>
                     </div>
-                    <button type="submit" class="form__submit" id="formSubmit">Send It →</button>
+                    <button type="submit" class="form__submit" id="formSubmit" data-content="contact.submitLabel">Send It →</button>
                     <p class="form__confirm" id="formConfirm">We'll be in touch. ✦</p>
                 </form>
             </div>
@@ -683,8 +703,8 @@
             <!-- Col 1 -->
             <div class="fade-in">
                 <img src="images/Wordmark.svg" alt="Flying Fish" class="footer__wordmark">
-                <p class="footer__blurb">Bold ideas. Precise craft. London-based design studio.</p>
-                <a href="mailto:info@flying-fish.co.uk" class="footer__email">info@flying-fish.co.uk</a>
+                <p class="footer__blurb" data-content="footer.tagline">Bold ideas. Precise craft. London-based design studio.</p>
+                <a href="mailto:info@flying-fish.co.uk" class="footer__email" data-content="footer.email">info@flying-fish.co.uk</a>
                 <div class="footer__socials">
                     <a href="#" class="footer__social-btn" aria-label="Instagram" style="display:none">
                         <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -698,9 +718,9 @@
                 </div>
             </div>
             <!-- Col 2: Navigate -->
-            <div class="fade-in" style="display:none">
-                <p class="footer__col-title">Navigate</p>
-                <ul class="footer__links">
+            <div class="fade-in" style="display:none" data-footer-col="navigate">
+                <p class="footer__col-title" data-col-heading>Navigate</p>
+                <ul class="footer__links" data-col-links>
                     <li><a href="#">Work</a></li>
                     <li><a href="#">Services</a></li>
                     <li><a href="#">Studio</a></li>
@@ -708,9 +728,9 @@
                 </ul>
             </div>
             <!-- Col 3: Legal -->
-            <div class="fade-in" style="display:none">
-                <p class="footer__col-title">Legal</p>
-                <ul class="footer__links">
+            <div class="fade-in" style="display:none" data-footer-col="legal">
+                <p class="footer__col-title" data-col-heading>Legal</p>
+                <ul class="footer__links" data-col-links>
                     <li><a href="#">Privacy Policy</a></li>
                     <li><a href="#">Accessibility</a></li>
                     <li><a href="#">Cookie Policy</a></li>
@@ -719,12 +739,77 @@
         </div>
 
         <div class="footer__bottom">
-            <p class="footer__copy">© 2026 Flying Fish Studio. Made with care in <span class="lime">London</span>.</p>
-            <p class="footer__tagline">Design · Craft · Character</p>
+            <p class="footer__copy" data-content="footer.copyright">© 2026 Flying Fish Studio. Made with care in London.</p>
+            <p class="footer__tagline" data-content="footer.craft">Design · Craft · Character</p>
         </div>
     </footer>
 
     <script>
+        /* ── CONTENT LOADER ───────────────────────────── */
+        async function loadContent() {
+            let content;
+
+            try {
+                const res = await fetch('content.json');
+                if (!res.ok) throw new Error('Failed to load');
+                content = await res.json();
+            } catch (e) {
+                console.warn('content.json not found — using hardcoded defaults');
+                return;
+            }
+
+            function get(obj, path) {
+                return path.split('.').reduce((acc, key) => acc?.[key], obj);
+            }
+
+            document.querySelectorAll('[data-content]').forEach(el => {
+                const value = get(content, el.dataset.content);
+                if (value !== undefined) {
+                    el.innerHTML = value.replace(/\n/g, '<br>');
+                }
+            });
+
+            if (content.ticker?.items?.length) {
+                const items = content.ticker.items;
+                const doubled = [...items, ...items];
+                const track = document.getElementById('ticker-track');
+                if (track) {
+                    track.innerHTML = doubled
+                        .map(s => `<span class="ticker__item">${s}</span>`)
+                        .join('');
+                }
+            }
+
+            if (content.contact) {
+                const c = content.contact;
+                const nameLabel = document.querySelector('label[for="name"], .form-label-name');
+                const emailLabel = document.querySelector('label[for="email"], .form-label-email');
+                const msgLabel = document.querySelector('label[for="message"], .form-label-message');
+                if (nameLabel) nameLabel.textContent = c.namePlaceholder;
+                if (emailLabel) emailLabel.textContent = c.emailPlaceholder;
+                if (msgLabel) msgLabel.textContent = c.messagePlaceholder;
+            }
+
+            if (content.footer?.columns) {
+                Object.entries(content.footer.columns).forEach(([key, col]) => {
+                    const colEl = document.querySelector(`[data-footer-col="${key}"]`);
+                    if (!colEl) return;
+                    const heading = colEl.querySelector('[data-col-heading]');
+                    if (heading) heading.textContent = col.heading;
+                    const linksEl = colEl.querySelector('[data-col-links]');
+                    if (linksEl && col.links) {
+                        linksEl.innerHTML = col.links
+                            .map(l => `<li><a href="${l.href}" class="footer__col-a">${l.label}</a></li>`)
+                            .join('');
+                    }
+                });
+            }
+
+            window._ffContent = content;
+        }
+
+        loadContent();
+
         /* ── CUSTOM CURSOR ────────────────────────────── */
         const ring = document.getElementById('curRing');
         let mx = 0, my = 0, rx = 0, ry = 0;
@@ -790,8 +875,14 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const c = window._ffContent?.contact;
+            const sendingLabel  = c?.sendingLabel   || 'Sending...';
+            const successMsg    = c?.successMessage || "We'll be in touch. ✦";
+            const resetLabel    = c?.resetLabel     || 'Send another message';
+            const errorMsg      = c?.errorMessage   || 'Something went wrong. Please try again or email us directly at info@flying-fish.co.uk';
+
             const original = submitBtn.innerHTML;
-            submitBtn.innerHTML = 'Sending...';
+            submitBtn.innerHTML = sendingLabel;
             submitBtn.disabled = true;
 
             const encode = (data) => {
@@ -816,26 +907,50 @@
 
                 if (res.ok) {
                     form.innerHTML = `
-                        <p style="
-                            font-family: var(--font-u);
-                            font-size: 18px;
-                            font-weight: 700;
-                            letter-spacing: 0.08em;
-                            text-transform: uppercase;
-                            color: var(--ink);
-                            text-align: center;
-                            padding: 3rem 0;
-                        ">We'll be in touch. ✦</p>
+                        <div style="text-align: center; padding: 3rem 0;">
+                            <p style="
+                                font-family: var(--font-u);
+                                font-size: 18px;
+                                font-weight: 700;
+                                letter-spacing: 0.08em;
+                                text-transform: uppercase;
+                                color: var(--ink);
+                                margin-bottom: 1.5rem;
+                            ">${successMsg}</p>
+                            <button
+                                id="resetForm"
+                                style="
+                                    font-family: var(--font-u);
+                                    font-size: 13px;
+                                    font-weight: 700;
+                                    letter-spacing: 0.1em;
+                                    text-transform: uppercase;
+                                    color: var(--ink);
+                                    background: transparent;
+                                    border: 1.5px solid var(--ink);
+                                    border-radius: 9999px;
+                                    padding: 10px 24px;
+                                    cursor: pointer;
+                                    transition: background 0.2s, color 0.2s;
+                                "
+                                onmouseover="this.style.background='var(--ink)';this.style.color='var(--cream)';"
+                                onmouseout="this.style.background='transparent';this.style.color='var(--ink)';"
+                            >${resetLabel}</button>
+                        </div>
                     `;
+
+                    document.getElementById('resetForm').addEventListener('click', () => {
+                        location.reload();
+                    });
                 } else {
                     submitBtn.innerHTML = original;
                     submitBtn.disabled = false;
-                    alert('Something went wrong. Please try again or email us directly at info@flying-fish.co.uk');
+                    alert(errorMsg);
                 }
             } catch (err) {
                 submitBtn.innerHTML = original;
                 submitBtn.disabled = false;
-                alert('Something went wrong. Please try again or email us directly at info@flying-fish.co.uk');
+                alert(errorMsg);
             }
         });
 

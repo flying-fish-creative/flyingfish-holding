@@ -1,0 +1,62 @@
+{
+  "nav": {
+    "cta": "Come swim with us"
+  },
+  "hero": {
+    "eyebrow": "Creative Studio — London",
+    "tagline": "Possibility, with wings.",
+    "scrollLabel": "Keep swimming",
+    "bottomLeft": "Bold ideas. Precise craft.\nLondon-based design studio.",
+    "bottomRight": "London, UK / Est. 2026"
+  },
+  "ticker": {
+    "items": [
+      "Product Design",
+      "Brand Direction",
+      "Web Design",
+      "Motion & Animation",
+      "Art Direction",
+      "Talks & Workshops",
+      "Identity Systems",
+      "Digital Experiences"
+    ]
+  },
+  "contact": {
+    "eyebrow": "Let's make something great",
+    "headline": "Let's make something impossible.",
+    "subline": "Oat flat whites and Pains Au Chocolat on us. Drop us a line and let's start a conversation.",
+    "namePlaceholder": "NAME",
+    "emailPlaceholder": "EMAIL",
+    "messagePlaceholder": "MESSAGE",
+    "submitLabel": "Send It →",
+    "sendingLabel": "Sending...",
+    "successMessage": "We'll be in touch. ✦",
+    "resetLabel": "Send another message",
+    "errorMessage": "Something went wrong. Please try again or email us directly at info@flying-fish.co.uk"
+  },
+  "footer": {
+    "tagline": "Bold ideas. Precise craft.\nLondon-based design studio.",
+    "email": "hello@flyingfish.studio",
+    "columns": {
+      "navigate": {
+        "heading": "Navigate",
+        "links": [
+          { "label": "Work", "href": "#work" },
+          { "label": "Services", "href": "#services" },
+          { "label": "Studio", "href": "#studio" },
+          { "label": "Contact", "href": "#contact" }
+        ]
+      },
+      "legal": {
+        "heading": "Legal",
+        "links": [
+          { "label": "Privacy Policy", "href": "/privacy" },
+          { "label": "Accessibility", "href": "/accessibility" },
+          { "label": "Cookie Policy", "href": "/cookies" }
+        ]
+      }
+    },
+    "copyright": "© 2026 Flying Fish Studio. Made with care in London.",
+    "craft": "Design · Craft · Character"
+  }
+}
