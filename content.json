@@ -23,7 +23,7 @@
   },
   "contact": {
     "eyebrow": "Got a project? Let's talk.",
-    "headline": "Oat flat whites and Pains Au\nChocolat on us",
+    "headline": "Oat flat whites\nand Pains Au\nChocolat on us",
     "subline": "Tell us about your 'what if' and we'll take it from there.",
     "namePlaceholder": "NAME",
     "emailPlaceholder": "EMAIL",
@@ -35,8 +35,8 @@
     "errorMessage": "Something went wrong. Please try again or email us directly at info@flying-fish.co.uk"
   },
   "footer": {
-    "tagline": "Bold ideas. Precise craft.\nLondon-based design studio.",
-    "email": "hello@flyingfish.studio",
+    "tagline": "Product thinking. Visual storytelling. Culture-led creative.",
+    "email": "info@flying-fish.co.uk",
     "columns": {
       "navigate": {
         "heading": "Navigate",
@@ -57,6 +57,5 @@
       }
     },
     "copyright": "© 2026 Flying Fish Studio.",
-    "craft": "Design · Craft · Character"
   }
 }
