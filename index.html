@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Fish — Creative Studio</title>
+    <link rel="icon" type="image/png" href="images/Favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
+    <style>
+        /* ── TOKENS ─────────────────────────────────────── */
+        :root {
+            --cream: #F3F0EB;
+            --ink:   #222222;
+            --lime:  #CEFF00;
+            --black: #111111;
+            --mid:   #595959;
+
+            --font-d: 'Bebas Neue', sans-serif;
+            --font-u: 'Space Grotesk', sans-serif;
+            --font-b: 'DM Sans', sans-serif;
+
+            --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --r:      16px;
+        }
+
+        /* ── RESET ──────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--cream);
+            color: var(--ink);
+            font-family: var(--font-b);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a, button, [role="button"] { cursor: none; }
+        @media (pointer: coarse) { a, button, [role="button"] { cursor: auto; } }
+
+        /* ── CUSTOM CURSOR ──────────────────────────────── */
+        .cur-ring {
+            position: fixed;
+            width: 44px;
+            height: 44px;
+            border: 1.5px solid var(--lime);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease, border-color 0.3s ease;
+        }
+        body.cursor-active .cur-ring { opacity: 1; }
+        body.on-dark .cur-ring { border-color: var(--lime); }
+        body.on-light .cur-ring { border-color: var(--ink); }
+        @media (pointer: coarse) { .cur-ring { display: none; } }
+
+        /* ── NAV ────────────────────────────────────────── */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 70px;
+            padding: 0 2.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 200;
+            transition: background 0.4s var(--ease);
+        }
+
+        .nav.scrolled { background: var(--cream); }
+
+        .nav.scrolled .nav__logo {
+            filter: grayscale(1) brightness(0.15);
+            transition: filter 0.4s var(--ease);
+        }
+
+        .nav__logo {
+            height: 38px;
+            width: auto;
+            display: block;
+        }
+
+        .nav__cta {
+            display: inline-block;
+            background: var(--lime);
+            color: var(--ink);
+            border-radius: 9999px;
+            font-family: var(--font-u);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 10px 24px;
+            cursor: none;
+            transition: transform 0.2s var(--spring);
+        }
+
+        .nav__cta:hover { transform: scale(1.05); }
+
+        .nav__hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: none;
+            padding: 4px;
+        }
+
+        .nav__hamburger span {
+            display: block;
+            width: 24px;
+            height: 1.5px;
+            background: #fff;
+            transition: background 0.3s var(--ease), transform 0.3s var(--ease), opacity 0.3s;
+        }
+
+        .nav.scrolled .nav__hamburger span { background: var(--ink); }
+
+        .nav__hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+        .nav__hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav__hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+        .nav__mobile-menu {
+            position: fixed;
+            top: 70px; left: 0; right: 0;
+            background: var(--cream);
+            padding: 1.25rem 2rem 1.5rem;
+            border-bottom: 1px solid rgba(34,34,34,0.08);
+            display: none;
+            z-index: 199;
+        }
+
+        .nav__mobile-menu.open { display: block; }
+
+        .nav__mobile-menu a {
+            display: block;
+            font-family: var(--font-u);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink);
+            text-decoration: none;
+            padding: 0.8rem 0;
+        }
+
+        /* ── HERO ───────────────────────────────────────── */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            height: 100svh;
+            min-height: 600px;
+            background-color: #222222;
+            background-image: url('images/hero.png');
+            background-size: cover;
+            background-position: center 35%;
+            overflow: hidden;
+        }
+
+        .hero__overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(
+                165deg,
+                rgba(0,0,0,0.42) 0%,
+                rgba(0,0,0,0.05) 35%,
+                rgba(0,0,0,0.38) 68%,
+                rgba(0,0,0,0.85) 100%
+            );
+        }
+
+        .hero__content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, calc(-50% - 40px));
+            z-index: 4;
+            text-align: center;
+            width: 100%;
+            padding: 0 2rem;
+            pointer-events: none;
+        }
+
+        .hero__logo-img {
+            display: block;
+            max-width: min(900px, 80vw);
+            width: auto;
+            height: auto;
+            margin: 0 auto 1rem;
+        }
+
+        .hero__tagline {
+            display: block;
+            font-family: var(--font-b);
+            font-size: clamp(18px, 1.8vw, 26px);
+            font-weight: 300;
+            font-style: italic;
+            color: rgba(255,255,255,0.88);
+            margin-top: 1.1rem;
+            letter-spacing: 0.01em;
+        }
+
+        .hero__bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0; right: 0;
+            padding: 0 2.75rem 4.5rem;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: end;
+            gap: 2rem;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .hero__desc {
+            font-family: var(--font-b);
+            font-size: 16px;
+            color: rgba(255,255,255,0.88);
+            line-height: 1.55;
+        }
+
+        .hero__scroll {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero__scroll-label {
+            font-family: var(--font-u);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+        }
+
+        .hero__scroll-line {
+            width: 1px; height: 64px; background: rgba(255,255,255,0.18);
+            overflow: hidden; position: relative;
+        }
+
+        .hero__scroll-line::after {
+            content: ''; position: absolute; top: -64px; left: 0;
+            width: 100%; height: 64px; background: var(--lime);
+            animation: scroll-drip 2s cubic-bezier(0.4,0,0.6,1) infinite;
+        }
+
+        @keyframes scroll-drip { 0% { top: -64px; } 100% { top: 64px; } }
+
+        .hero__location {
+            font-family: var(--font-u);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: rgba(255,255,255,0.65);
+            text-align: right;
+            line-height: 1.7;
+        }
+
+        /* ── TICKER ─────────────────────────────────────── */
+        .ticker {
+            width: 100%;
+            height: 44px;
+            background: var(--lime);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ticker__track {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            animation: tick 34s linear infinite;
+            will-change: transform;
+        }
+
+        .ticker__item {
+            font-family: var(--font-u);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--ink);
+            letter-spacing: 0.06em;
+            padding: 0 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .ticker__sep {
+            opacity: 0.5;
+            margin-left: 0.25rem;
+        }
+
+        @keyframes tick {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ── CONTACT ────────────────────────────────────── */
+        .contact {
+            background: var(--cream);
+            padding: 7.5rem 2.75rem;
+        }
+
+        .contact__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .contact__eyebrow {
+            font-family: var(--font-u);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--mid);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact__headline {
+            font-family: var(--font-d);
+            font-size: clamp(44px, 6vw, 86px);
+            line-height: 0.93;
+            color: var(--ink);
+            margin-bottom: 2rem;
+        }
+
+        .contact__blurb {
+            font-family: var(--font-b);
+            font-size: 16px;
+            color: var(--mid);
+            line-height: 1.65;
+            max-width: 400px;
+        }
+
+        .form__field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2rem;
+        }
+
+        .form__label {
+            font-family: var(--font-u);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--mid);
+            margin-bottom: 0.5rem;
+        }
+
+        .form__input,
+        .form__textarea {
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid var(--ink);
+            border-radius: 0;
+            font-family: var(--font-b);
+            font-size: 16px;
+            color: var(--ink);
+            width: 100%;
+            padding: 0.6rem 0;
+            outline: none;
+            resize: none;
+            -webkit-appearance: none;
+            transition: border-color 0.25s var(--ease);
+        }
+
+        .form__input:focus,
+        .form__textarea:focus { border-bottom-color: var(--lime); }
+
+        .form__input::placeholder,
+        .form__textarea::placeholder { color: rgba(34,34,34,0.28); }
+
+        .form__submit {
+            width: 100%;
+            background: var(--ink);
+            color: var(--lime);
+            font-family: var(--font-u);
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 14px;
+            border-radius: 9999px;
+            border: none;
+            cursor: none;
+            margin-top: 2rem;
+            transition: transform 0.2s var(--spring), opacity 0.2s;
+        }
+
+        .form__submit:hover { transform: scale(1.02); }
+
+        .form__confirm {
+            display: none;
+            font-family: var(--font-u);
+            font-size: 15px;
+            color: var(--ink);
+            text-align: center;
+            letter-spacing: 0.08em;
+            padding: 14px;
+            margin-top: 2rem;
+        }
+
+        /* ── FOOTER ─────────────────────────────────────── */
+        .footer {
+            background: var(--black);
+            padding: 5rem 2.75rem 2.5rem;
+        }
+
+        .footer__grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .footer__wordmark {
+            display: block;
+            height: 36px;
+            width: auto;
+            margin-bottom: 1rem;
+        }
+
+        .footer__blurb {
+            font-family: var(--font-b);
+            font-size: 14px;
+            color: #888;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+            max-width: 280px;
+        }
+
+        .footer__email {
+            font-family: var(--font-u);
+            font-size: 14px;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer__email:hover { color: var(--lime); }
+
+        .footer__socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer__social-btn {
+            width: 33px; height: 33px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #888;
+            flex-shrink: 0;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .footer__social-btn:hover { border-color: var(--lime); color: var(--lime); }
+        .footer__social-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .footer__col-title {
+            font-family: var(--font-u);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer__links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer__links a {
+            font-family: var(--font-b);
+            font-size: 14px;
+            color: #888;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer__links a:hover { color: var(--lime); }
+
+        .footer__bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer__copy {
+            font-family: var(--font-b);
+            font-size: 13px;
+            color: #555;
+        }
+
+        .footer__copy .lime { color: var(--lime); }
+
+        .footer__tagline {
+            font-family: var(--font-u);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: #888;
+        }
+
+        /* ── SCROLL FADE-IN ─────────────────────────────── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────────── */
+        @media (max-width: 768px) {
+            .nav { padding: 0 1.5rem; }
+            .nav__cta { display: none; }
+            .nav__hamburger { display: flex; }
+
+            .hero__bottom {
+                padding: 0 1.5rem 3rem;
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .hero__desc { text-align: center; }
+            .hero__location { text-align: center; }
+
+            .contact { padding: 5rem 1.5rem; }
+            .contact__grid { grid-template-columns: 1fr; gap: 3rem; }
+
+            .footer { padding: 5rem 1.5rem 2.5rem; }
+            .footer__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .footer__bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body class="on-dark">
+
+    <!-- Custom Cursor -->
+    <div id="curRing" class="cur-ring"></div>
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+        <a href="#" aria-label="Flying Fish home">
+            <img src="images/Wordmark.svg" alt="Flying Fish" class="nav__logo" id="navLogo">
+        </a>
+        <a href="#contact" class="nav__cta">Contact Us</a>
+        <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Nav Menu -->
+    <div class="nav__mobile-menu" id="mobileMenu" aria-hidden="true">
+        <a href="#contact" id="mobileContact">Contact Us</a>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero__overlay"></div>
+
+        <div class="hero__content">
+            <img src="images/Logo lockup nobackground.svg" alt="Flying Fish" class="hero__logo-img">
+            <span class="hero__tagline">Possibility, with wings.</span>
+        </div>
+
+        <div class="hero__bottom">
+            <p class="hero__desc">Bold ideas. Precise craft.<br>London-based design studio.</p>
+            <div class="hero__scroll">
+                <span class="hero__scroll-label">Scroll</span>
+                <div class="hero__scroll-line"></div>
+            </div>
+            <p class="hero__location">London, UK / Est.&nbsp;2026</p>
+        </div>
+    </section>
+
+    <!-- SERVICES TICKER -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker__track">
+            <span class="ticker__item">Product Design <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Brand Direction <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Web Design <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Motion &amp; Animation <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Art Direction <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Talks &amp; Workshops <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Identity Systems <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Digital Experiences <span class="ticker__sep">✦</span></span>
+            <!-- Duplicate for seamless loop -->
+            <span class="ticker__item">Product Design <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Brand Direction <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Web Design <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Motion &amp; Animation <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Art Direction <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Talks &amp; Workshops <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Identity Systems <span class="ticker__sep">✦</span></span>
+            <span class="ticker__item">Digital Experiences <span class="ticker__sep">✦</span></span>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="contact__grid">
+            <div>
+                <p class="contact__eyebrow fade-in">Let's make something great</p>
+                <h2 class="contact__headline fade-in">Let's make something impossible.</h2>
+                <p class="contact__blurb fade-in">Oat flat whites and Pains Au Chocolat on us. Drop us a line and let's start a conversation.</p>
+            </div>
+            <div>
+                <form
+                    class="fade-in"
+                    name="contact"
+                    method="POST"
+                    data-netlify="true"
+                    netlify-honeypot="bot-field"
+                    id="contactForm"
+                >
+                    <input type="hidden" name="form-name" value="contact">
+                    <p style="display:none;">
+                        <label>Don't fill this out: <input name="bot-field"></label>
+                    </p>
+                    <div class="form__field">
+                        <label class="form__label" for="fieldName">Name</label>
+                        <input class="form__input" type="text" id="fieldName" name="name" placeholder="Your name" required>
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="fieldEmail">Email</label>
+                        <input class="form__input" type="email" id="fieldEmail" name="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form__field">
+                        <label class="form__label" for="fieldMessage">Message</label>
+                        <textarea class="form__textarea" id="fieldMessage" name="message" rows="5" placeholder="Tell us about your project…" required></textarea>
+                    </div>
+                    <button type="submit" class="form__submit" id="formSubmit">Send It →</button>
+                    <p class="form__confirm" id="formConfirm">We'll be in touch. ✦</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer__grid">
+            <!-- Col 1 -->
+            <div class="fade-in">
+                <img src="images/Wordmark.svg" alt="Flying Fish" class="footer__wordmark">
+                <p class="footer__blurb">Bold ideas. Precise craft. London-based design studio.</p>
+                <a href="mailto:info@flying-fish.co.uk" class="footer__email">info@flying-fish.co.uk</a>
+                <div class="footer__socials">
+                    <a href="#" class="footer__social-btn" aria-label="Instagram" style="display:none">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/flying-fish-creative-uk/" class="footer__social-btn" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="#" class="footer__social-btn" aria-label="X" style="display:none">
+                        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.261 5.632 5.903-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <!-- Col 2: Navigate -->
+            <div class="fade-in" style="display:none">
+                <p class="footer__col-title">Navigate</p>
+                <ul class="footer__links">
+                    <li><a href="#">Work</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Studio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <!-- Col 3: Legal -->
+            <div class="fade-in" style="display:none">
+                <p class="footer__col-title">Legal</p>
+                <ul class="footer__links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Accessibility</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <p class="footer__copy">© 2026 Flying Fish Studio. Made with care in <span class="lime">London</span>.</p>
+            <p class="footer__tagline">Design · Craft · Character</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ── CUSTOM CURSOR ────────────────────────────── */
+        const ring = document.getElementById('curRing');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX;
+            my = e.clientY;
+            document.body.classList.add('cursor-active');
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', () => {
+            document.body.classList.remove('cursor-active');
+        });
+
+        document.addEventListener('mouseenter', () => {
+            document.body.classList.add('cursor-active');
+        });
+
+        (function lerp() {
+            rx += (mx - rx) * 0.11;
+            ry += (my - ry) * 0.11;
+            ring.style.left = rx + 'px';
+            ring.style.top  = ry + 'px';
+            requestAnimationFrame(lerp);
+        })();
+
+        /* ── NAV SCROLL ───────────────────────────────── */
+        const nav = document.getElementById('nav');
+
+        function updateNav() {
+            const threshold = window.innerHeight * 0.85;
+            const past = window.scrollY > threshold;
+            nav.classList.toggle('scrolled', past);
+            document.body.classList.toggle('on-dark', !past);
+            document.body.classList.toggle('on-light', past);
+        }
+
+        window.addEventListener('scroll', updateNav, { passive: true });
+        updateNav();
+
+        /* ── HAMBURGER ────────────────────────────────── */
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            const open = mobileMenu.classList.toggle('open');
+            hamburger.classList.toggle('open', open);
+            hamburger.setAttribute('aria-expanded', open);
+            mobileMenu.setAttribute('aria-hidden', !open);
+        });
+
+        document.getElementById('mobileContact').addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            hamburger.classList.remove('open');
+            hamburger.setAttribute('aria-expanded', false);
+            mobileMenu.setAttribute('aria-hidden', true);
+        });
+
+        /* ── CONTACT FORM ─────────────────────────────── */
+        const form = document.getElementById('contactForm');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const original = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Sending...';
+            submitBtn.disabled = true;
+
+            const encode = (data) => {
+                return Object.keys(data)
+                    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+                    .join('&');
+            };
+
+            const payload = encode({
+                'form-name': 'contact',
+                'name': form.querySelector('[name="name"]').value,
+                'email': form.querySelector('[name="email"]').value,
+                'message': form.querySelector('[name="message"]').value,
+            });
+
+            try {
+                const res = await fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: payload
+                });
+
+                if (res.ok) {
+                    form.innerHTML = `
+                        <p style="
+                            font-family: var(--font-u);
+                            font-size: 18px;
+                            font-weight: 700;
+                            letter-spacing: 0.08em;
+                            text-transform: uppercase;
+                            color: var(--ink);
+                            text-align: center;
+                            padding: 3rem 0;
+                        ">We'll be in touch. ✦</p>
+                    `;
+                } else {
+                    submitBtn.innerHTML = original;
+                    submitBtn.disabled = false;
+                    alert('Something went wrong. Please try again or email us directly at info@flying-fish.co.uk');
+                }
+            } catch (err) {
+                submitBtn.innerHTML = original;
+                submitBtn.disabled = false;
+                alert('Something went wrong. Please try again or email us directly at info@flying-fish.co.uk');
+            }
+        });
+
+        /* ── WATER RIPPLE ─────────────────────────────── */
+        (function waterRipple() {
+            const hero   = document.getElementById('hero');
+            const canvas = document.createElement('canvas');
+            canvas.setAttribute('aria-hidden', 'true');
+            canvas.style.cssText =
+                'position:absolute;inset:0;width:100%;height:100%;' +
+                'pointer-events:none;mix-blend-mode:overlay;z-index:3;';
+            hero.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            const GW = 200, GH = 112;
+            const off    = document.createElement('canvas');
+            off.width    = GW;
+            off.height   = GH;
+            const offCtx  = off.getContext('2d');
+            const imgData = offCtx.createImageData(GW, GH);
+
+            let buf1 = new Float32Array(GW * GH);
+            let buf2 = new Float32Array(GW * GH);
+            let lastGX = -1, lastGY = -1;
+
+            function resize() {
+                canvas.width  = hero.offsetWidth  || window.innerWidth;
+                canvas.height = hero.offsetHeight || window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize, { passive: true });
+
+            function disturb(gx, gy) {
+                const R = 4, strength = 300;
+                for (let dy = -R; dy <= R; dy++) {
+                    for (let dx = -R; dx <= R; dx++) {
+                        const nx = gx + dx, ny = gy + dy;
+                        if (nx < 1 || nx >= GW - 1 || ny < 1 || ny >= GH - 1) continue;
+                        const d = Math.hypot(dx, dy);
+                        if (d <= R) {
+                            const idx = ny * GW + nx;
+                            buf1[idx] = Math.min(512, buf1[idx] + strength * (1 - d / R));
+                        }
+                    }
+                }
+            }
+
+            hero.addEventListener('mousemove', e => {
+                const r  = hero.getBoundingClientRect();
+                const gx = Math.round((e.clientX - r.left) / r.width  * (GW - 2)) + 1;
+                const gy = Math.round((e.clientY - r.top)  / r.height * (GH - 2)) + 1;
+                if (lastGX >= 0) {
+                    const steps = Math.max(1, Math.max(Math.abs(gx - lastGX), Math.abs(gy - lastGY)));
+                    for (let s = 0; s <= steps; s++) {
+                        const t  = s / steps;
+                        disturb(
+                            Math.round(lastGX + (gx - lastGX) * t),
+                            Math.round(lastGY + (gy - lastGY) * t)
+                        );
+                    }
+                } else {
+                    disturb(gx, gy);
+                }
+                lastGX = gx; lastGY = gy;
+            }, { passive: true });
+
+            hero.addEventListener('mouseleave', () => { lastGX = -1; lastGY = -1; });
+
+            function step() {
+                for (let y = 1; y < GH - 1; y++) {
+                    for (let x = 1; x < GW - 1; x++) {
+                        const i = y * GW + x;
+                        buf2[i] = (buf1[i - 1] + buf1[i + 1] + buf1[i - GW] + buf1[i + GW]) * 0.5 - buf2[i];
+                        buf2[i] *= 0.987;
+                    }
+                }
+                const tmp = buf1; buf1 = buf2; buf2 = tmp;
+            }
+
+            function render() {
+                const d = imgData.data;
+                for (let i = 0; i < GW * GH; i++) {
+                    const h     = buf1[i];
+                    const gray  = (128 + Math.max(-115, Math.min(115, h * 0.32))) | 0;
+                    const alpha = Math.min(255, Math.abs(h) * 0.62) | 0;
+                    const p = i << 2;
+                    d[p] = d[p + 1] = d[p + 2] = gray;
+                    d[p + 3] = alpha;
+                }
+                offCtx.putImageData(imgData, 0, 0);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(off, 0, 0, canvas.width, canvas.height);
+            }
+
+            function loop() { step(); render(); requestAnimationFrame(loop); }
+            loop();
+        })();
+
+        /* ── SCROLL FADE-IN ───────────────────────────── */
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            const siblings = Array.from(el.parentElement.children)
+                .filter(c => c.classList.contains('fade-in'));
+            el.style.transitionDelay = (siblings.indexOf(el) * 0.08) + 's';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
