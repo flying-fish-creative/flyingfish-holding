@@ -5,8 +5,8 @@
   "hero": {
     "eyebrow": "Creative Studio — London",
     "tagline": "Possibility, with wings.",
-    "scrollLabel": "Keep swimming ",
-    "bottomLeft": "Bold ideas. Precise craft.\nLondon-based design studio.",
+    "scrollLabel": "Keep swimming down",
+    "bottomLeft": "From surface to air.\nIt all starts with an action.",
     "bottomRight": "London, UK / Est. 2026"
   },
   "ticker": {
@@ -22,9 +22,9 @@
     ]
   },
   "contact": {
-    "eyebrow": "Let's make something great",
-    "headline": "Let's make something impossible.",
-    "subline": "Oat flat whites and Pains Au Chocolat on us. Drop us a line and let's start a conversation.",
+    "eyebrow": "Got a project? Let's talk.",
+    "headline": "Oat flat whites and Pains Au Chocolat on us",
+    "subline": "Drop us a line and let's start a conversation. Let's make something impossible.",
     "namePlaceholder": "NAME",
     "emailPlaceholder": "EMAIL",
     "messagePlaceholder": "MESSAGE",
